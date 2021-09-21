@@ -7,7 +7,7 @@
 #if (__cplusplus < 201402L)
 #error "This header requires at least C++14"
 #endif
-#if (__cplusplus == 201703L)
+#if (__cplusplus >= 201703L)
 #define _CXX_HAS_FILESYSTEM
 #endif
 
