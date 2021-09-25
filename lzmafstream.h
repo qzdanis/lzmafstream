@@ -280,16 +280,14 @@ ifbuf::int_type ifbuf::uflow() {
 }
 std::streamsize ifbuf::xsgetn(char_type* s, std::streamsize count) {
     std::streamsize gcount = 0;
-    while (underflow() != traits_type::eof()) {
-        auto rdcount =
-            std::min(count, static_cast<std::streamsize>(avail_bytes()));
-        std::copy_n(&b_[co_], rdcount, reinterpret_cast<uint8_t*>(s));
+    while (gcount != count) {
+        if (underflow() == traits_type::eof())
+            break;
+        auto rdcount = std::min((count - gcount),
+                                static_cast<std::streamsize>(avail_bytes()));
+        std::copy_n(&b_[co_], rdcount, reinterpret_cast<uint8_t*>(&s[gcount]));
         co_ += rdcount;
         gcount += rdcount;
-        if (gcount == count)
-            break;
-        s = &s[rdcount];
-        count -= rdcount;
     }
     return gcount;
 }
